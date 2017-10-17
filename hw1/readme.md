@@ -1,6 +1,6 @@
 # CLI 命令行实用程序开发基础 #
 
-* 本次作业根据进行[开发 Linux 命令行实用程序](https://www.ibm.com/developerworks/cn/linux/shell/clutil/index.html)开发
+* 本次作业根据[开发 Linux 命令行实用程序](https://www.ibm.com/developerworks/cn/linux/shell/clutil/index.html)进行开发
 
 * 测试工具
 
