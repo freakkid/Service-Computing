@@ -4,11 +4,9 @@
 
 * 测试工具
 
-    + ubuntu下安装模拟打印机cups-pdf，供测试"lp"指令：
+    + ubuntu下安装模拟打印机cups-pdf，供测试"lp"指令： [PDF printer for CUPS](https://apps.ubuntu.com/cat/applications/lucid/cups-pdf/)
 
-        [PDF printer for CUPS](https://apps.ubuntu.com/cat/applications/lucid/cups-pdf/)
-
-    +　由[gen_data.go](data/gen_data.go)生成的供测试两种换页类型的输入文件：
+    + 由[gen_data.go](data/gen_data.go)生成的供测试两种换页类型的输入文件：
 
     - [l_input_file](data/l_input_file)：由1000个"line i hello world\n"(1<=i<=1000)语句组成
     
