@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Todos</title>
+</head>
+
+<body>
+    <h1>{{.Username}}</h1>
+
+    <p>{{.Message}}</p>
+
+    <div>
+        {{range $index, $element := .Todos}} {{if gt $index 0}} {{ printf "%d : %s" $index $element}} {{end}} <br /><br /> {{end}}
+    </div>
+</body>
+
+</html>
