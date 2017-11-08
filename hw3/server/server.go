@@ -26,7 +26,7 @@ type TodoList struct {
 // to render html template to return to client
 // choose html template acconding to templateName
 func RenderTemplate(w http.ResponseWriter, templateName string, todoList *TodoList) {
-	if err := Templates.ExecuteTemplate(w, templateName[5:], todoList); err != nil {
+	if err := Templates.ExecuteTemplate(w, templateName, todoList); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 

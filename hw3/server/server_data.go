@@ -3,23 +3,26 @@ package server
 import (
 	"database/sql"
 	"fmt"
+	"go/build"
 	"html/template"
 )
 
 // template files for sending to client
 // html template files path
 const (
-	RegisterTemplate   = "html/register.html"
-	AddItemTemplate    = "html/add.html"
-	DeleteItemTemplate = "html/delete.html"
-	ShowItemsTemplate  = "html/show.html"
+	RegisterTemplate   = "register.html"
+	AddItemTemplate    = "add.html"
+	DeleteItemTemplate = "delete.html"
+	ShowItemsTemplate  = "show.html"
 )
 
+var htmlPosition string = build.Default.GOPATH + "/src/github.com/freakkid/Service-Computing/hw3/html/"
+
 var htmlFilesNames = []string{
-	RegisterTemplate,
-	AddItemTemplate,
-	DeleteItemTemplate,
-	ShowItemsTemplate,
+	htmlPosition + RegisterTemplate,
+	htmlPosition + AddItemTemplate,
+	htmlPosition + DeleteItemTemplate,
+	htmlPosition + ShowItemsTemplate,
 }
 
 var Templates = template.Must(template.ParseFiles(htmlFilesNames...))
