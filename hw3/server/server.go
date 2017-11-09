@@ -17,21 +17,6 @@ import (
  * Some incorrect URLs may receive error message, some may get 404 page.
  */
 
-type TodoList struct {
-	Username string
-	Todos    []string
-	Message  string
-}
-
-// to render html template to return to client
-// choose html template acconding to templateName
-func RenderTemplate(w http.ResponseWriter, templateName string, todoList *TodoList) {
-	if err := Templates.ExecuteTemplate(w, templateName, todoList); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
-
-}
-
 // handle "user/register"
 // correct URL: user/registe?username=XXX&password=XXX
 // return infomation of registering fail/successfully
@@ -43,14 +28,14 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		message  string
 	)
 	if username == "" || password == "" { // if one of important parameters is empty
-		message = Messages["EmptyUsernameOrPassword"]
-	} else if DealAddUserIntoDBFn(username, password) { // succeed to execute
-		message = Messages["RegisterSuccess"]
+		message = messages["EmptyUsernameOrPassword"]
+	} else if dealAddUserIntoDBFn(username, password) { // succeed to execute
+		message = messages["RegisterSuccess"]
 	} else {
-		message = Messages["RegisterFail"]
+		message = messages["RegisterFail"]
 	}
 	// render html template
-	RenderTemplate(w, RegisterTemplate, &TodoList{Username: username, Todos: []string{}, Message: message})
+	renderTemplate(w, registerTemplate, &TodoList{Username: username, Todos: []string{}, Message: message})
 	// log infomation on server
 	tools.LogOKInfo(r.Method, "register")
 }
@@ -67,13 +52,13 @@ func AddItemHandler(w http.ResponseWriter, r *http.Request) {
 		message  string
 	)
 	if username == "" || password == "" {
-		message = Messages["EmptyUsernameOrPassword"]
-	} else if DealAddItemIntoDBFn(username, password, item) {
-		message = Messages["AddSuccess"]
+		message = messages["EmptyUsernameOrPassword"]
+	} else if dealAddItemIntoDBFn(username, password, item) {
+		message = messages["AddSuccess"]
 	} else {
-		message = Messages["AddFail"]
+		message = messages["AddFail"]
 	}
-	RenderTemplate(w, AddItemTemplate, &TodoList{Username: username, Todos: []string{}, Message: message})
+	renderTemplate(w, addItemTemplate, &TodoList{Username: username, Todos: []string{}, Message: message})
 	tools.LogOKInfo(r.Method, "add")
 }
 
@@ -90,16 +75,16 @@ func DeleteItemHandler(w http.ResponseWriter, r *http.Request) {
 	)
 
 	if username == "" || password == "" {
-		message = Messages["EmptyUsernameOrPassword"]
+		message = messages["EmptyUsernameOrPassword"]
 	} else {
 		itemIdex, err := strconv.Atoi(itemIndexString)
-		if err != nil || !DealDeleteItemIntoDBFn(username, password, itemIdex) {
-			message = Messages["DeleteFail"]
+		if err != nil || !dealDeleteItemIntoDBFn(username, password, itemIdex) {
+			message = messages["DeleteFail"]
 		} else {
-			message = Messages["DeleteSuccess"]
+			message = messages["DeleteSuccess"]
 		}
 	}
-	RenderTemplate(w, DeleteItemTemplate, &TodoList{Username: username, Todos: []string{}, Message: message})
+	renderTemplate(w, deleteItemTemplate, &TodoList{Username: username, Todos: []string{}, Message: message})
 	tools.LogOKInfo(r.Method, "delete")
 }
 
@@ -116,16 +101,16 @@ func ShowListHandler(w http.ResponseWriter, r *http.Request) {
 		result   bool
 	)
 	if username == "" || password == "" {
-		message = Messages["EmptyUsernameOrPassword"]
+		message = messages["EmptyUsernameOrPassword"]
 	} else {
-		todoList, result = DealShowItemsFromDBFn(username, password)
+		todoList, result = dealShowItemsFromDBFn(username, password)
 		if result {
-			message = fmt.Sprintf(Messages["ShowSuccess"], len(todoList)-1)
+			message = fmt.Sprintf(messages["ShowSuccess"], len(todoList)-1)
 		} else {
-			message = Messages["ShowFail"]
+			message = messages["ShowFail"]
 		}
 	}
-	RenderTemplate(w, ShowItemsTemplate, &TodoList{Username: username, Todos: todoList, Message: message})
+	renderTemplate(w, ShowItemsTemplate, &TodoList{Username: username, Todos: todoList, Message: message})
 	tools.LogOKInfo(r.Method, "show")
 }
 

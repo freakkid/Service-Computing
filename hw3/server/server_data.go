@@ -10,49 +10,49 @@ import (
 // template files for sending to client
 // html template files path
 const (
-	RegisterTemplate   = "register.html"
-	AddItemTemplate    = "add.html"
-	DeleteItemTemplate = "delete.html"
+	registerTemplate   = "register.html"
+	addItemTemplate    = "add.html"
+	deleteItemTemplate = "delete.html"
 	ShowItemsTemplate  = "show.html"
 )
 
 var htmlPosition string = build.Default.GOPATH + "/src/github.com/freakkid/Service-Computing/hw3/html/"
 
 var htmlFilesNames = []string{
-	htmlPosition + RegisterTemplate,
-	htmlPosition + AddItemTemplate,
-	htmlPosition + DeleteItemTemplate,
+	htmlPosition + registerTemplate,
+	htmlPosition + addItemTemplate,
+	htmlPosition + deleteItemTemplate,
 	htmlPosition + ShowItemsTemplate,
 }
 
-var Templates = template.Must(template.ParseFiles(htmlFilesNames...))
+var templates = template.Must(template.ParseFiles(htmlFilesNames...))
 
 // -------------------------------------------------
 
 // database names and sqlstatements
 var (
-	DBName       = "todos"          // database name
-	DBTableName  = "primaryversion" // a table name
-	DBPara       string             // database open parameter
-	CreateDBPara string             // database open parameter (to create database)
+	dbName       = "todos"          // database name
+	dbTableName  = "primaryversion" // a table name
+	dbPara       string             // database open parameter
+	createDBPara string             // database open parameter (to create database)
 )
 
 // database execute statements
-var DBStatements = map[string]string{
-	"CREATEDB": "CREATE DATABASE IF NOT EXISTS " + DBName,
-	"USEDB":    "USE " + DBName,
-	"CREATETABLE": "CREATE TABLE IF NOT EXISTS " + DBTableName +
+var dbStatements = map[string]string{
+	"CREATEDB": "CREATE DATABASE IF NOT EXISTS " + dbName,
+	"USEDB":    "USE " + dbName,
+	"CREATETABLE": "CREATE TABLE IF NOT EXISTS " + dbTableName +
 		" (username varchar(255) PRIMARY KEY, password varchar(255) NOT NULL, todos Text)",
-	"REGISTER":  "INSERT INTO " + DBTableName + " (username, password, todos) values (?, ?, ?)",
-	"EDITTODOS": "UPDATE " + DBTableName + " set todos=? WHERE username=? AND password=?",
-	"SHOWTODOS": "SELECT todos FROM " + DBTableName + " WHERE username=? AND password=?",
-	"QUERYUSER": "SELECT username FROM " + DBTableName + " WHERE username=? AND password=?",
+	"REGISTER":  "INSERT INTO " + dbTableName + " (username, password, todos) values (?, ?, ?)",
+	"EDITTODOS": "UPDATE " + dbTableName + " set todos=? WHERE username=? AND password=?",
+	"SHOWTODOS": "SELECT todos FROM " + dbTableName + " WHERE username=? AND password=?",
+	"QUERYUSER": "SELECT username FROM " + dbTableName + " WHERE username=? AND password=?",
 }
 
 // -------------------------------------------------------------
 
 // message to client
-var Messages = map[string]string{
+var messages = map[string]string{
 	"EmptyUsernameOrPassword": "username and password should be non-empty",
 	"RegisterSuccess":         "register success",
 	"RegisterFail":            "register fail: the username may have been used",
@@ -65,7 +65,7 @@ var Messages = map[string]string{
 }
 
 // exec some simple sql statement
-func DBExec(db *sql.DB, DBStatement string) {
+func dbExec(db *sql.DB, DBStatement string) {
 	if _, err := db.Exec(DBStatement); err != nil {
 		db.Close()
 		panic(err)
@@ -81,18 +81,18 @@ func init() {
 		addrs    = "127.0.0.1"     // the tcp address
 		port     = "3306"          // the port
 	)
-	DBPara = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&timeout=30s", username, password, addrs, port, DBName)
-	CreateDBPara = fmt.Sprintf("%s:%s@tcp(%s:%s)/", username, password, addrs, port)
+	dbPara = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&timeout=30s", username, password, addrs, port, dbName)
+	createDBPara = fmt.Sprintf("%s:%s@tcp(%s:%s)/", username, password, addrs, port)
 
 	// // create database and table when init package
-	db, err := OpenDB(CreateDBPara)
+	db, err := openDB(createDBPara)
 	if err != nil {
 		panic(err)
 	}
 
-	DBExec(db, DBStatements["CREATEDB"])    // create database
-	DBExec(db, DBStatements["USEDB"])       // use database
-	DBExec(db, DBStatements["CREATETABLE"]) // create table in database
+	dbExec(db, dbStatements["CREATEDB"])    // create database
+	dbExec(db, dbStatements["USEDB"])       // use database
+	dbExec(db, dbStatements["CREATETABLE"]) // create table in database
 
 	db.Close()
 }
