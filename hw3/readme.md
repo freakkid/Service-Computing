@@ -33,7 +33,7 @@ Before running this program, please make sure that you have installed the follow
 
     > $ go get github.com/go-sql-driver/mysql
 
-## Usage
+Run the program
 
 + Get the program
 
@@ -72,6 +72,8 @@ Before running this program, please make sure that you have installed the follow
     ```
 
     End the program by _Ctrl + C_
+
+## Usage and Curl Testing
 
 + Register as a user
 
@@ -482,6 +484,75 @@ Before running this program, please make sure that you have installed the follow
     2017/11/08 22:03:30 [Todos]  GET | 200 | delete
     ...
     ```
+## ab Testing
+
+For the database connection has the max connection number, the server will report errors if requests are too much. So I test my program using URL that has nothing about SQL.
+
+commonly used parameters:
+* -n means the numbers of all requests
+* -c means the numbers of requests in one time and the default number is 1
+
+I test my web program by 10000 requests and 1000 requests one time(that is 1000 users).
+
+> $ ab -n 10000 -c 1000 http://localhost:8080/user/register?username=
+
+This is the ab-test result, I write some Chinese comments in it by "#":
+
+```
+This is ApacheBench, Version 2.3 <$Revision: 1706008 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 1000 requests
+Completed 2000 requests
+Completed 3000 requests
+Completed 4000 requests
+Completed 5000 requests
+Completed 6000 requests
+Completed 7000 requests
+Completed 8000 requests
+Completed 9000 requests
+Completed 10000 requests
+Finished 10000 requests
+
+
+Server Software:        
+Server Hostname:        localhost   # 服务器主机
+Server Port:            8080        # 服务器端口
+
+Document Path:          /user/register?username=
+Document Length:        156 bytes   # 测试的页面文档长度
+
+Concurrency Level:      1000        # 并发用户数，即-c参数指定的数量
+Time taken for tests:   0.848 seconds   # 测试总用时
+Complete requests:      10000       # 测试完成的请求数量
+Failed requests:        0           # 测试失败的请求数量
+Total transferred:      2730000 bytes   # 响应数据长度总和
+HTML transferred:       1560000 bytes   # html内容长度
+Requests per second:    11792.94 [#/sec] (mean) # 每秒请求数量
+Time per request:       84.796 [ms] (mean)      # 平均请求响应时间
+Time per request:       0.085 [ms] (mean, across all concurrent requests)   # 每个请求实际运行的平均时间
+Transfer rate:          3144.02 [Kbytes/sec] received   # 平均每秒网络流量，帮助排除网络流量过大导致响应时间延长的可能
+
+Connection Times (ms)   # 网络消耗时间的组成
+              min  mean[+/-sd] median   max
+Connect:        0   13   8.7     11      39
+Processing:     3   38  18.6     33     253
+Waiting:        0   34  18.4     29     248
+Total:          4   51  21.3     48     261
+
+Percentage of the requests served within a certain time (ms)
+  50%     48    # 50%的用户请求在48ms内完成，后面的类似
+  66%     59
+  75%     63
+  80%     66
+  90%     80
+  95%     96
+  98%    104
+  99%    109
+ 100%    261 (longest request)
+```
 
 
 
