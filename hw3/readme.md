@@ -12,6 +12,8 @@
 
 The task requirements is from [ex-cloudgo-start](doc/ex-cloudgo-start.html)
 
+In order to know golang web better, I **didn't use any frame** in this homework
+
 ## About Todos
 
 This program easy to use can help people to record what they need to do in a simple way. Users just type URL into their browser or enter command at the command line. There are only four command for using totally. The data of users are saved in database stored on the server so users should be online when using this tools. User should register by username and password. User can add, delete and show the todolist with username and password.
