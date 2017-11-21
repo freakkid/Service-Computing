@@ -1,15 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"os"
+
+	"github.com/freakkid/Service-Computing/hw4/server"
+	flag "github.com/spf13/pflag"
+)
+
+const (
+	PORT string = "8080"
 )
 
 func main() {
-	// get current path
-	if currentPath, err := os.Getwd(); err != nil {
-		fmt.Fprintf(os.Stderr, err.Error())
-	} else {
-
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = PORT
 	}
+
+	pPort := flag.StringP("port", "p", PORT, "PORT for listening")
+	flag.Parse()
+	if len(*pPort) != 0 {
+		port = *pPort
+	}
+
+	serverInstance := server.NewServer()
+	serverInstance.Run(":" + port)
 }

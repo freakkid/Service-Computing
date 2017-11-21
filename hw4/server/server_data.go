@@ -5,6 +5,11 @@ import (
 	"fmt"
 	"go/build"
 	"html/template"
+	"os"
+)
+
+var (
+	staticDir string // directory of static html files
 )
 
 // template files for sending to client
@@ -17,8 +22,6 @@ const (
 )
 
 var htmlPosition string = build.Default.GOPATH + "/src/github.com/freakkid/Service-Computing/hw3/html/"
-
-var staticDir string = "/assets"
 
 var htmlFilesNames = []string{
 	htmlPosition + registerTemplate,
@@ -44,16 +47,25 @@ var dbStatements = map[string]string{
 	"CREATEDB": "CREATE DATABASE IF NOT EXISTS " + dbName,
 	"USEDB":    "USE " + dbName,
 	"CREATETABLE": "CREATE TABLE IF NOT EXISTS " + dbTableName +
-		" (username varchar(255) PRIMARY KEY, password varchar(255) NOT NULL, todos Text)",
-	"REGISTER":  "INSERT INTO " + dbTableName + " (username, password, todos) values (?, ?, ?)",
-	"EDITTODOS": "UPDATE " + dbTableName + " set todos=? WHERE username=? AND password=?",
-	"SHOWTODOS": "SELECT todos FROM " + dbTableName + " WHERE username=? AND password=?",
-	"QUERYUSER": "SELECT username FROM " + dbTableName + " WHERE username=? AND password=?",
+		" (id varchar(255) PRIMARY KEY, username varchar(255) NOT NULL, password varchar(255) NOT NULL, todos Text)",
+	"REGISTER":  "INSERT INTO " + dbTableName + " (id, username, password, todos) values (?, ?, ?, ?)",
+	"GETID": "SELECT id FROM " + dbTableName + " WHERE username=? AND password=?",
+	"EDITTODOS": "UPDATE " + dbTableName + " set todos=? WHERE id=?",
+	"SHOWTODOS": "SELECT todos FROM " + dbTableName + " WHERE id=?",
+	"QUERYUSER": "SELECT username FROM " + dbTableName + " WHERE id=?",
 }
 
 // -------------------------------------------------------------
 
 // message to client
+
+// the result of user's request
+const (
+	SUCCESS = "success"
+	FAIL = "fail"
+)
+
+// the details of user request results
 var messages = map[string]string{
 	"EmptyUsernameOrPassword": "username and password should be non-empty",
 	"RegisterSuccess":         "register success",
@@ -74,8 +86,8 @@ func dbExec(db *sql.DB, DBStatement string) {
 	}
 }
 
-// to create database when program starts run
 func init() {
+	// ----------- to create database when program starts run -------------
 	// The paraments should reset when runs on a new platform
 	var (
 		username = "root"          // the username of mysql database
@@ -86,7 +98,7 @@ func init() {
 	dbPara = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&timeout=30s", username, password, addrs, port, dbName)
 	createDBPara = fmt.Sprintf("%s:%s@tcp(%s:%s)/", username, password, addrs, port)
 
-	// // create database and table when init package
+	// create database and table when init package
 	db, err := openDB(createDBPara)
 	if err != nil {
 		panic(err)
@@ -97,4 +109,17 @@ func init() {
 	dbExec(db, dbStatements["CREATETABLE"]) // create table in database
 
 	db.Close()
-}
+	// ---------------------------------------------------------------------
+
+	// ---------------------------- get paths ------------------------------
+	// get current path
+	var currentPath string
+	if currentPath, err = os.Getwd(); err != nil {
+		panic(err)
+	}
+	// directory of static html files
+	staticDir = currentPath + "/assets"
+	fmt.Println(staticDir)
+	// ---------------------------------------------------------------------
+
+} 
