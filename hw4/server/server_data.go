@@ -36,10 +36,10 @@ var templates = template.Must(template.ParseFiles(htmlFilesNames...))
 
 // database names and sqlstatements
 var (
-	dbName       = "todos"          // database name
-	dbTableName  = "primaryversion" // a table name
-	dbPara       string             // database open parameter
-	createDBPara string             // database open parameter (to create database)
+	dbName       = "todos"         // database name
+	dbTableName  = "secondversion" // a table name
+	dbPara       string            // database open parameter
+	createDBPara string            // database open parameter (to create database)
 )
 
 // database execute statements
@@ -47,35 +47,45 @@ var dbStatements = map[string]string{
 	"CREATEDB": "CREATE DATABASE IF NOT EXISTS " + dbName,
 	"USEDB":    "USE " + dbName,
 	"CREATETABLE": "CREATE TABLE IF NOT EXISTS " + dbTableName +
-		" (id varchar(255) PRIMARY KEY, username varchar(255) NOT NULL, password varchar(255) NOT NULL, todos Text)",
+		" (id varchar(255) PRIMARY KEY, username varchar(255) NOT NULL UNIQUE, password varchar(255) NOT NULL, todos Text)",
 	"REGISTER":  "INSERT INTO " + dbTableName + " (id, username, password, todos) values (?, ?, ?, ?)",
-	"GETID": "SELECT id FROM " + dbTableName + " WHERE username=? AND password=?",
+	"QUERYUSER": "SELECT id FROM " + dbTableName + " WHERE username=? AND password=?",
 	"EDITTODOS": "UPDATE " + dbTableName + " set todos=? WHERE id=?",
 	"SHOWTODOS": "SELECT todos FROM " + dbTableName + " WHERE id=?",
-	"QUERYUSER": "SELECT username FROM " + dbTableName + " WHERE id=?",
 }
 
 // -------------------------------------------------------------
 
 // message to client
 
-// the result of user's request
 const (
+	// the [result] of user's request
 	SUCCESS = "success"
-	FAIL = "fail"
+	FAIL    = "fail"
+	// the [operation] of user's request
+	REGISTER = "register"
+	ADD      = "add"
+	DELETE   = "delete"
+	SHOW     = "show"
 )
 
 // the details of user request results
 var messages = map[string]string{
+	// empty username and password
 	"EmptyUsernameOrPassword": "username and password should be non-empty",
-	"RegisterSuccess":         "register success",
-	"RegisterFail":            "register fail: the username may have been used",
-	"AddSuccess":              "add success",
-	"AddFail":                 "add fail: please check username and password and the item should be non-empty",
-	"DeleteSuccess":           "delete success",
-	"DeleteFail":              "delete fail: please check username and password and the item index should be valid",
-	"ShowSuccess":             "show success： you have %d todo items",
-	"ShowFail":                "show fail: please check username and password",
+	// register
+	"RegisterSuccess": "register success",
+	"RegisterFail":    "register fail",
+	// add item
+	"AddSuccess": "add success",
+	"EmptyItem":  "add fail: the item should be non-empty",
+	"AddFail":    "add fail: please check username and password",
+	// delete item
+	"DeleteSuccess": "delete success",
+	"DeleteFail":    "delete fail: please check username and password and the item index should be valid",
+	// show items
+	"ShowSuccess": "show success： you have %d todo items",
+	"ShowFail":    "show fail: please check username and password",
 }
 
 // exec some simple sql statement
@@ -118,8 +128,7 @@ func init() {
 		panic(err)
 	}
 	// directory of static html files
-	staticDir = currentPath + "/assets"
-	fmt.Println(staticDir)
+	staticDir = currentPath + "/assets/"
 	// ---------------------------------------------------------------------
 
-} 
+}

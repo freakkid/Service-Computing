@@ -3,16 +3,41 @@
 
 <head>
     <title>Todos</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="css/main.css" type="text/css" rel="stylesheet" media="screen" />
+    <link href="css/operation.css" type="text/css" rel="stylesheet" media="screen" />
+    <link rel="shortcut icon" href="images/ai.ico" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 </head>
 
 <body>
-    <h1>{{.Username}}</h1>
 
-    <p>{{.Message}}</p>
-
-    <div>
-        {{range $index, $element := .Todos}} {{if gt $index 0}} {{ printf "%d : %s" $index $element}} {{end}} <br /><br /> {{end}}
+    <div id="left-part"></div>
+    <div id="right-part"></div>
+    <div class="middle-part">
+        <h1>Show My Items</h1>
+        <div id="description">
+            <div class="welcome">Welcome! Manage your plan by
+                <em>Todos. </em>
+            </div>
+            <form action="/showItems" method="post">
+                username
+                <input type="text" name="username" /> password
+                <input type="password" name="password" />
+                <input type="submit" name="OK" value="OK" />
+            </form>
+            <div id="result" class="register">
+                <h2>{{.Username}}</h2>
+                <p>{{.Message}}</p>
+                <div>
+                    {{range $index, $element := .Todos}} {{if gt $index 0}} {{ printf "%d : %s" $index $element}} {{end}}
+                    <br />
+                    <br /> {{end}}
+                </div>
+            </div>
+        </div>
     </div>
+    <img class="logo" src="images/ai.ico" alt="logo"></img>
 </body>
 
 </html>
