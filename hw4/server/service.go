@@ -59,8 +59,7 @@ func deleteItemByUsernameAndPasswordItemindex(
 	if isEmptyUsernameOrPassword(username, password) { // if one of important parameters is empty
 		return TodoList{Operation: DELETE, Username: username, Result: FAIL, Message: messages["EmptyUsernameOrPassword"]}
 	} else if itemIndex, err := strconv.Atoi(itemIndexString); err == nil {
-
-		if _, ok := operateOnDB(deleteItemIntoDB, username, tools.MD5Encryption(password), itemIndex); ok {
+		if _, ok := operateOnDB(deleteItemIntoDB, username, tools.MD5Encryption(password), itemIndex+1); ok {
 			return TodoList{Operation: DELETE, Username: username, Result: SUCCESS, Message: messages["DeleteSuccess"]}
 		}
 	}
@@ -72,10 +71,11 @@ func deleteItemByUsernameAndPasswordItemindex(
 // return todolist, result and details
 func showItemsByUsernameAndPassword(username string, password string) TodoList {
 	if isEmptyUsernameOrPassword(username, password) { // if one of important parameters is empty
-		return TodoList{Operation: SHOW, Username: username, Result: FAIL, Message: messages["EmptyUsernameOrPassword"]}
+		return TodoList{Operation: SHOW, Username: username, Result: FAIL,
+			Message: messages["EmptyUsernameOrPassword"]}
 	} else if todoList, ok := operateOnDB(showItemsFromDB, username, tools.MD5Encryption(password), nil); ok {
 		return TodoList{
-			Operation: SHOW, Username: username, Todos: todoList, Result: SUCCESS,
+			Operation: SHOW, Username: username, Todos: todoList[1:], Result: SUCCESS, // remove the first item(empty) of todolist
 			Message: fmt.Sprintf(messages["ShowSuccess"], len(todoList)-1)}
 	}
 	return TodoList{Operation: SHOW, Username: username, Result: FAIL, Message: messages["ShowFail"]}

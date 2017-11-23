@@ -30,14 +30,13 @@
                 <h2>{{.Username}}</h2>
                 <p>{{.Message}}</p>
                 <div>
-                    {{range $index, $element := .Todos}} {{if gt $index 0}} {{ printf "%d : %s" $index $element}} {{end}}
-                    <br />
+                    {{range $index, $element := .Todos}}  {{ printf "%d : %s" $index $element}}
                     <br /> {{end}}
                 </div>
             </div>
         </div>
     </div>
-    <img class="logo" src="images/ai.ico" alt="logo"></img>
+    <img class="logo" src="images/ai.png" alt="logo"></img>
 </body>
 
 </html>
