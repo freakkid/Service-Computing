@@ -128,11 +128,14 @@ itemIndex是要删除的todos项的序号(大于0，小于todos项总数)，只�
 
 ## 其他
 
-+ 数据库的用户ID使用UUID生成
++ 数据库的用户ID使用UUID生成，用户密码进行MD5加密
 
-+ 用户密码进行MD5加密
+  ![20](images/20.png)
 
 + 浏览器上显示的页面除了static外其他都使用了http/template模板
 
++ 程序运行过程中服务器的输出截图
+  
+  ![19](images/19.png)
 
 ### At last, thanks for reviewing my code!
