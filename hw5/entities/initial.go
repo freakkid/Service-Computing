@@ -40,7 +40,6 @@ func init() {
 		port       = "3306"          // the port
 		driverName = "mysql"         // name of sql driver
 		dbName     = "test"          // database name
-		//dbTableName = "user_info"     // table name
 	)
 
 	var (
