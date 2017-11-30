@@ -76,7 +76,7 @@
 
     本次作业是在[xorm](https://github.com/go-xorm/xorm)的基础上进行更改的xorm更改的，除了使用了xorm处理数据库事务，还对原来代码进行优化，可以检查运行主机上是否已存在数据库和表，没有则自行创建，不会报错，做一些简化工作如去掉不必要的变量，增强鲁棒性。 
 
-    Learning knowledge about a structure 'entity-dao-service' that I never known before this homeork makes me have a lot of fun. 
+    Learning knowledge about a new structure 'entity-dao-service' that I never known before this homeork makes me have a lot of fun. 
 
 + At Last
 
