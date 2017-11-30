@@ -2,22 +2,10 @@ package entities
 
 import "time"
 
-// UserInfo .
+// UserInfo
 type UserInfo struct {
-	UID        int `orm:"id,auto-inc"` //语义标签
+	UID        int `xorm:"pk autoincr"` // primary key and auto increase
 	UserName   string
-	DepartName string
-	CreateAt   *time.Time
-}
-
-// NewUserInfo .
-func NewUserInfo(u UserInfo) *UserInfo {
-	if len(u.UserName) == 0 {
-		panic("UserName shold not null!")
-	}
-	if u.CreateAt == nil {
-		t := time.Now()
-		u.CreateAt = &t
-	}
-	return &u
+	DepartName string     `xorm:"default ''"`
+	CreateAt   *time.Time `xorm:"created"` // auto create time
 }

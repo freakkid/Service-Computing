@@ -1,5 +1,12 @@
 # 
 
++ 作业要求
+
+    ![10](img/10.png)
+
+    [作业来源](http://blog.csdn.net/pmlpml/article/details/78602290#六进一步工作)
+
++ 
 1. 使用 xorm 或 gorm 实现本文的程序，从编程效率、程序结构、服务性能等角度对比 database/sql 与 orm 实现的异同！ 
     orm 是否就是实现了 dao 的自动化？
 使用 ab 测试性能
