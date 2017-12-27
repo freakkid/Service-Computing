@@ -27,3 +27,4 @@ func (dao *userInfoDao) FindByID(id int) (*UserInfo, error) {
 func (dao *userInfoDao) CountAll() (int64, error) {
 	return dao.Count(new(UserInfo))
 }
+

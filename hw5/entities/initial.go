@@ -53,13 +53,27 @@ func init() {
 	// create database before creating xorm engine
 	createDB(driverName, createDBPara, createDataBaseStmt)
 
-	// create engine
+	// creatse engine
 	xormEngine, err = xorm.NewEngine(driverName, dataSourceName)
 	checkErr(err)
 
 	xormEngine.SetMapper(core.GonicMapper{})
 
 	// sync the struct changes to database
-	err = xormEngine.Sync2(new(UserInfo))
-	checkErr(err)
+	checkErr(xormEngine.Sync2(new(UserInfo)))
+	checkErr(xormEngine.Sync2(new(User)))
+	checkErr(xormEngine.Sync2(new(Meeting)))
+	_, _ = xormEngine.Insert(User{UserName: "llleel", Password: "ssse", Email: " 111 234 ", Phone: "111"})
+	_, _ = xormEngine.Insert(User{UserName: "llleel2", Password: "ssse", Email: " 111 123", Phone: "111"})
+	_, _ = xormEngine.Insert(User{UserName: "llleel3", Password: "ssse", Email: "1111", Phone: "111"})
+	_, _ = xormEngine.Insert(User{UserName: "llleel4", Password: "ssse", Email: "oo 111 dd", Phone: "111"})
+	_, _ = xormEngine.Insert(User{UserName: "llleel5", Password: "ssse", Email: "11ee", Phone: "111"})
+	var users []User
+	xormEngine.Where("email LIKE ?", "% 111 %").Limit(2).Find(&users)
+	var users1 []User
+	xormEngine.In("password", "ssse").Find(&users1)
+	fmt.Println(users)
+	fmt.Println(users1)
+
+	//checkErr(err)
 }
