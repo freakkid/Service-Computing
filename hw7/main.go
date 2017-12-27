@@ -8,11 +8,12 @@ import (
 
 func test1() {
 	start := time.Now()
-	client.HTTPGet("kid")
-	client.HTTPGet("sherry")
-	client.HTTPGet("bingo")
-	client.HTTPGet("lock")
-	client.HTTPGet("exit")
+	x := client.HTTPGet("kid")
+	y := client.HTTPGet("sherry")
+	z := client.HTTPGet("bingo")
+	m := client.HTTPGet("lock")
+	n := client.HTTPGet("exit")
+	fmt.Printf("%s", x + y + z + m + n)
 	fmt.Println("Time:", time.Since(start))
 }
 

@@ -29,7 +29,7 @@ type resultJSON struct {
 }
 
 // HTTPGet .
-func HTTPGet(q string) {
+func HTTPGet(q string) string {
 	resp, err := http.Get(generateURL(q))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -42,10 +42,9 @@ func HTTPGet(q string) {
 	}
 	var resultjson resultJSON
 	if err = json.Unmarshal(body, &resultjson); err == nil {
-		fmt.Println(resultjson.TransResult[0]["src"], resultjson.TransResult[0]["dst"])
-	} else {
-		fmt.Println(q + ": Ocurr error when parsing json response")
+		return fmt.Sprintln(resultjson.TransResult[0]["src"], resultjson.TransResult[0]["dst"])
 	}
+	return q + ": Ocurr error when parsing json response"
 }
 
 // HTTPGetWithChannel .
